@@ -50,7 +50,7 @@ func initDbCon() {
     dbUser, dbPwd)
 
   var err error
-  // dbPool is the pool of database connections.
+  // store db connection handler as global var
   db, err = sql.Open("mysql", dbURI)
   if err != nil {
     panic(err.Error())
@@ -90,6 +90,7 @@ func fetchRates() {
   recalculateProfits()
 }
 
+// recalculate profits in USD in database, based on latest currency rates
 func recalculateProfits() {
   _, err := db.Query("UPDATE winners SET profit_usd=profit_eth*(SELECT price FROM rates WHERE ticker='eth') WHERE profit_eth>0")
   if err != nil {
